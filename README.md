@@ -15,6 +15,6 @@ mkdir -p build
 Удобная команда для проверки программы:
 
 ```
-clear && g++ -Wall src/main.cpp src/qammodulation.cpp src/agn.cpp -o build/main && ./build/main
+clear && g++ -Wall src/main.cpp src/qamModulation.cpp src/agn.cpp -o build/main && ./build/main
 ```
 > Запускать из корня проекта
