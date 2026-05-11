@@ -19,7 +19,7 @@ std::vector<std::complex<float>> QAMmodulation::modulate_bits(const std::vector<
             float re = 1.0f - 2.0f * b0;
             float im = 1.0f - 2.0f * b1;
 
-            symb[i] = std::complex(re, im) / std::sqrt(2.0f);
+            symb[i] = std::complex<float>(re, im) / std::sqrt(2.0f);
         }
         return symb;
 
@@ -35,7 +35,7 @@ std::vector<std::complex<float>> QAMmodulation::modulate_bits(const std::vector<
             float re = (1.0f - 2.0f * b0) * (2.0f * b1 + 1.0f);
             float im = (1.0f - 2.0f * b2) * (2.0f * b3 + 1.0f);
 
-            symb[i] = std::complex(re, im) / std::sqrt(10.0f);
+            symb[i] = std::complex<float>(re, im) / std::sqrt(10.0f);
         }
         return symb;
 
@@ -53,7 +53,7 @@ std::vector<std::complex<float>> QAMmodulation::modulate_bits(const std::vector<
             float re = (1.0f - 2.0f * b0) * (4.0f * b1 + 2.0f * b2 + 1.0f);
             float im = (1.0f - 2.0f * b3) * (4.0f * b4 + 2.0f * b5 + 1.0f);
 
-            symb[i] = std::complex(re, im) / std::sqrt(42.0f);
+            symb[i] = std::complex<float>(re, im) / std::sqrt(42.0f);
         }
         return symb;
 
@@ -140,4 +140,5 @@ std::vector<uint8_t> QAMmodulation::demodulate_bits(const std::vector<std::compl
         throw std::invalid_argument("Invalid Mod Type");
     }
     return decbits;
+
 }
