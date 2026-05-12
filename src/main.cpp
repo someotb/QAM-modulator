@@ -2,34 +2,105 @@
 #include "../include/agn.hpp"
 
 #include <iostream>
+#include <fstream>
+#include <ctime>
 
 int main()
 {
+    srand(time(nullptr));
     std::vector<uint8_t> bits;
     std::vector<uint8_t> decbits;
     std::vector<std::complex<float>> symb;
     std::vector<std::complex<float>> n_symb;
+    std::ofstream file1("data/bits.tsv");
+    std::ofstream file2("data/QPSK.tsv");
+    std::ofstream file3("data/QAM16.tsv");
+    std::ofstream file4("data/QAM64.tsv");
+
+    if (!file1.is_open())
+    {
+        std::cerr << "Failed to open file1\n";
+        return 1;
+    }
+
+    if (!file2.is_open())
+    {
+        std::cerr << "Failed to open file2\n";
+        return 1;
+    }
+
+    if (!file3.is_open())
+    {
+        std::cerr << "Failed to open file3\n";
+        return 1;
+    }
+
+    if (!file4.is_open())
+    {
+        std::cerr << "Failed to open file4\n";
+        return 1;
+    }
+
     for (int i = 0; i < 1000; ++i)
     {
         uint8_t bit = rand() % 2;
         bits.push_back(bit);
+        file1 << +bit << "\t";
     }
 
-    QAMmodulation mod(ModType::QAM64);
-    symb = mod.modulate_bits(bits);
-    decbits = mod.demodulate_bits(symb);
-
-    float mx = 0.0f;
-    float dx = 0.6f;
-    GausseNoise agn(mx, dx);
-
-    n_symb = agn.add_noise(symb);
-
-    std::cout << "First 10 bits vs decbits:\n";
-    for (size_t i = 0; i < 10; ++i)
-        std::cout << "Bit: " << +bits[i] << " | " << "Decbit: " << +decbits[i] << "\n";
-
-    std::cout << "\nFirst 10 symbols:\n";
-    for (size_t i = 0; i < 10; ++i)
-        std::cout << "Symbols: " << n_symb[i] << "\n";
+    for (int i = 0; i < 3; ++i)
+    {
+        if (i == 0)
+        {
+            QAMmodulation mod(ModType::QPSK);
+            symb = mod.modulate_bits(bits);
+            
+            for (float j = 0.2; j < 2.0; j += 0.2)
+            {
+                float mx = 0.0f;
+                float dx = j;
+                GausseNoise agn(mx, dx);
+                n_symb = agn.add_noise(symb);
+                decbits = mod.demodulate_bits(n_symb);
+                for (const auto &e : decbits)
+                    file2 << +e << "\t";
+                file2 << "\n";
+            }
+        }
+        else if (i == 1)
+        {
+            QAMmodulation mod(ModType::QAM16);
+            symb = mod.modulate_bits(bits);
+            
+            for (float j = 0.2; j < 2.0; j += 0.2)
+            {
+                float mx = 0.0f;
+                float dx = j;
+                GausseNoise agn(mx, dx);
+                n_symb = agn.add_noise(symb);
+                decbits = mod.demodulate_bits(n_symb);
+                for (const auto &e : decbits)
+                    file3 << +e << "\t";
+                file3 << "\n";
+            }
+        }
+        else
+        {
+            QAMmodulation mod(ModType::QAM64);
+            symb = mod.modulate_bits(bits);
+            
+            for (float j = 0.2; j < 2.0; j += 0.2)
+            {
+                float mx = 0.0f;
+                float dx = j;
+                GausseNoise agn(mx, dx);
+                n_symb = agn.add_noise(symb);
+                decbits = mod.demodulate_bits(n_symb);
+                for (const auto &e : decbits)
+                    file4 << +e << "\t";
+                file4 << "\n";
+            }
+        }
+    }
+    return 0;
 }
