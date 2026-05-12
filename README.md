@@ -1,4 +1,4 @@
-# Test task YADRO
+# Тестовое задание YADRO
 
 - Написать на языке С++ класс выполняющий функциональность модулятора QAM (QPSK, QAM16, QAM64) (`qamModulation.cpp`, `qamModulation.hpp`)
 - Написать на языке С++ класс выполняющий функциональность добавления гауссовского шума к созвездию QAM (`agn.cpp`, `agn.hpp`)
@@ -8,13 +8,30 @@
 
 ## Старт
 
+### Модуляция(C++)
 Создать папку `build`:
 ```
 mkdir -p build
 ```
-Удобная команда для проверки программы:
-
+Удобная команда для запуска программы:
 ```
 clear && g++ -Wall src/main.cpp src/qamModulation.cpp src/agn.cpp -o build/main && ./build/main
+```
+
+### Визуализация(Python)
+Создадим виртуальное окружение:
+```
+python3 -m venv .venv
+source .venv/bin/activate
+```
+
+Установим нужные библиотеки(в .venv):
+```
+pip install -r requirements.txt
+```
+
+Удобная команда для запуска программы(в .venv):
+```
+clear && python src/main.py
 ```
 > Запускать из корня проекта
