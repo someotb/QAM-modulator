@@ -41,7 +41,7 @@ int main()
         return 1;
     }
 
-    for (int i = 0; i < 1000; ++i)
+    for (int i = 0; i < 1200; ++i)
     {
         uint8_t bit = rand() % 2;
         bits.push_back(bit);
@@ -59,12 +59,12 @@ int main()
             {
                 float mx = 0.0f;
                 float dx = j;
+                float bit_err = 0.0f;
                 GausseNoise agn(mx, dx);
                 n_symb = agn.add_noise(symb);
                 decbits = mod.demodulate_bits(n_symb);
-                for (const auto &e : decbits)
-                    file2 << +e << "\t";
-                file2 << "\n";
+                bit_err = mod.check_bits(bits, decbits);
+                file2 << bit_err << "\t";
             }
         }
         else if (i == 1)
@@ -76,12 +76,12 @@ int main()
             {
                 float mx = 0.0f;
                 float dx = j;
+                float bit_err = 0.0f;
                 GausseNoise agn(mx, dx);
                 n_symb = agn.add_noise(symb);
                 decbits = mod.demodulate_bits(n_symb);
-                for (const auto &e : decbits)
-                    file3 << +e << "\t";
-                file3 << "\n";
+                bit_err = mod.check_bits(bits, decbits);
+                file3 << bit_err << "\t";
             }
         }
         else
@@ -93,12 +93,12 @@ int main()
             {
                 float mx = 0.0f;
                 float dx = j;
+                float bit_err = 0.0f;
                 GausseNoise agn(mx, dx);
                 n_symb = agn.add_noise(symb);
                 decbits = mod.demodulate_bits(n_symb);
-                for (const auto &e : decbits)
-                    file4 << +e << "\t";
-                file4 << "\n";
+                bit_err = mod.check_bits(bits, decbits);
+                file4 << bit_err << "\t";
             }
         }
     }
