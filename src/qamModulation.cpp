@@ -140,5 +140,24 @@ std::vector<uint8_t> QAMmodulation::demodulate_bits(const std::vector<std::compl
         throw std::invalid_argument("Invalid Mod Type");
     }
     return decbits;
+}
 
+float QAMmodulation::check_bits(const std::vector<uint8_t> &bits, const std::vector<uint8_t> &decbits)
+{
+    if (bits.empty() || decbits.empty())
+        throw std::invalid_argument("Data empty");
+
+    if (bits.size() != decbits.size())
+        throw std::invalid_argument("Datas size not equal");
+
+    int bit_err_cnt = 0;
+
+    for (size_t i = 0; i < bits.size(); ++i)
+        if (+bits[i] != +decbits[i])
+            bit_err_cnt++;
+
+    if (bit_err_cnt == 0)
+        return 0.0f;
+
+    return (float)bit_err_cnt / bits.size();
 }
