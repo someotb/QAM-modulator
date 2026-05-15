@@ -12,32 +12,32 @@ int main()
     std::vector<uint8_t> decbits;
     std::vector<std::complex<float>> symb;
     std::vector<std::complex<float>> n_symb;
-    std::ofstream file1("data/bits.tsv");
-    std::ofstream file2("data/QPSK.tsv");
-    std::ofstream file3("data/QAM16.tsv");
-    std::ofstream file4("data/QAM64.tsv");
+    std::ofstream BITS("data/bits.tsv");
+    std::ofstream QPSK("data/QPSK.tsv");
+    std::ofstream QAM16("data/QAM16.tsv");
+    std::ofstream QAM64("data/QAM64.tsv");
 
-    if (!file1.is_open())
+    if (!BITS.is_open())
     {
-        std::cerr << "Failed to open file1\n";
+        std::cerr << "Failed to open file BITS\n";
         return 1;
     }
 
-    if (!file2.is_open())
+    if (!QPSK.is_open())
     {
-        std::cerr << "Failed to open file2\n";
+        std::cerr << "Failed to open file QPSK\n";
         return 1;
     }
 
-    if (!file3.is_open())
+    if (!QAM16.is_open())
     {
-        std::cerr << "Failed to open file3\n";
+        std::cerr << "Failed to open file QAM16\n";
         return 1;
     }
 
-    if (!file4.is_open())
+    if (!QAM64.is_open())
     {
-        std::cerr << "Failed to open file4\n";
+        std::cerr << "Failed to open file QAM64\n";
         return 1;
     }
 
@@ -45,7 +45,7 @@ int main()
     {
         uint8_t bit = rand() % 2;
         bits.push_back(bit);
-        file1 << +bit << "\t";
+        BITS << +bit << "\t";
     }
 
     for (int i = 0; i < 3; ++i)
@@ -54,8 +54,8 @@ int main()
         {
             QAMmodulation mod(ModType::QPSK);
             symb = mod.modulate_bits(bits);
-            
-            for (float j = 0.2; j < 2.0; j += 0.2)
+
+            for (float j = 0.2; j < 20.0; j += 0.2)
             {
                 float mx = 0.0f;
                 float dx = j;
@@ -64,15 +64,15 @@ int main()
                 n_symb = agn.add_noise(symb);
                 decbits = mod.demodulate_bits(n_symb);
                 bit_err = mod.check_bits(bits, decbits);
-                file2 << bit_err << "\t";
+                QPSK << bit_err << "\t";
             }
         }
         else if (i == 1)
         {
             QAMmodulation mod(ModType::QAM16);
             symb = mod.modulate_bits(bits);
-            
-            for (float j = 0.2; j < 2.0; j += 0.2)
+
+            for (float j = 0.2; j < 20.0; j += 0.2)
             {
                 float mx = 0.0f;
                 float dx = j;
@@ -81,15 +81,15 @@ int main()
                 n_symb = agn.add_noise(symb);
                 decbits = mod.demodulate_bits(n_symb);
                 bit_err = mod.check_bits(bits, decbits);
-                file3 << bit_err << "\t";
+                QAM16 << bit_err << "\t";
             }
         }
         else
         {
             QAMmodulation mod(ModType::QAM64);
             symb = mod.modulate_bits(bits);
-            
-            for (float j = 0.2; j < 2.0; j += 0.2)
+
+            for (float j = 0.2; j < 20.0; j += 0.2)
             {
                 float mx = 0.0f;
                 float dx = j;
@@ -98,7 +98,7 @@ int main()
                 n_symb = agn.add_noise(symb);
                 decbits = mod.demodulate_bits(n_symb);
                 bit_err = mod.check_bits(bits, decbits);
-                file4 << bit_err << "\t";
+                QAM64 << bit_err << "\t";
             }
         }
     }
